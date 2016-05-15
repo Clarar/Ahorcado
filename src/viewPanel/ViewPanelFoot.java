@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import hangman.ControllerHangman2;
+import hangman.ControllerHangman;
 
 public class ViewPanelFoot extends JPanel {
 	
@@ -185,7 +185,7 @@ public class ViewPanelFoot extends JPanel {
 		}
 	}
 	
-	public void setActionButton(ControllerHangman2 controller){
+	public void setActionButton(ControllerHangman controller){
 		/*for (int i = 0; i < buttons.size(); i++) {
 			buttons.get(i).addActionListener(controller);
 			

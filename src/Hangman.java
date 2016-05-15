@@ -1,13 +1,14 @@
+import hangman.ViewStart;
+import hangman.ControllerStart;
+
 public class Hangman {
 
 	public static void main(String[] args) throws Exception {
-		ViewHangman view = new ViewHangman(); 
-		ModelHangman model = new ModelHangman();
-		ControllerHangman controller = new ControllerHangman(model, view);
+		ViewStart view = new ViewStart(); 
+		ControllerStart controller = new ControllerStart(view);
 		
 		view.setController(controller);
-		view.chooseDictionary();
-		view.windowsGame();
+		view.runGame();
 	}
 	
 }

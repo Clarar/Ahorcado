@@ -1,9 +1,9 @@
 package hangman;
-public class Hangman2 {
+public class StartGame {
 
 	public static void main(String[] args) throws Exception {
-		ViewHangman2 view = new ViewHangman2(); 
-		ControllerHangman2 controller = new ControllerHangman2(view);
+		ViewHangman view = new ViewHangman(); 
+		ControllerHangman controller = new ControllerHangman(view);
 		
 		view.setController(controller);
 		view.run();

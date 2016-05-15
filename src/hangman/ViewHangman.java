@@ -24,13 +24,13 @@ import viewPanel.ViewPanelFoot;
 import viewPanel.ViewPanelHead;
 
 import viewPanel.*;
-public class ViewHangman2 extends JFrame {
+public class ViewHangman extends JFrame {
 	
 	protected ViewPanelCenter panelCenter;
 	protected ViewPanelHead panelHead;
 	protected ViewPanelFoot panelFoot;
 	
-	public ViewHangman2(){
+	public ViewHangman(){
 		setLayout(new BorderLayout(5,5));
 		panelCenter = new ViewPanelCenter();
 		panelHead = new ViewPanelHead();
@@ -137,7 +137,7 @@ public class ViewHangman2 extends JFrame {
 	    setVisible(true);
 	}
 	
-	public void setController(ControllerHangman2 controller){
+	public void setController(ControllerHangman controller){
 		panelFoot.setActionButton(controller);
 		panelCenter.getJtxt_letra().addKeyListener(controller);
 		panelCenter.getJtxt_palabra().addKeyListener(controller);

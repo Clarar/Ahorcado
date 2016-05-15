@@ -13,17 +13,17 @@ import javax.swing.JOptionPane;
 
 import drawAhorcado.*;
 
-public class ControllerHangman2 implements ActionListener, KeyListener  {
+public class ControllerHangman implements ActionListener, KeyListener  {
 	
 	private ModelHangman model;
-	private ViewHangman2 view;
+	private ViewHangman view;
 	private boolean hangmanTheEnd;
 	private ModelHangmanDictionary modelDictionary;
 	private boolean dictionary;
 	private ImageIcon imageWinner;
 	private ImageIcon imageLoser;
 	
-	public ControllerHangman2( ViewHangman2 view ){
+	public ControllerHangman( ViewHangman view ){
 		this.model = new ModelHangman();
 		this.view = view;
 		this.hangmanTheEnd = false;
