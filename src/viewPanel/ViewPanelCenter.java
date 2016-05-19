@@ -1,5 +1,6 @@
 package viewPanel;
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -37,6 +38,7 @@ public class ViewPanelCenter extends JPanel {
 	protected JPanel jpl_letter;
 	protected JPanel jpl_letra;
 	protected JLabel jlbl_image;
+	protected JPanel jpl_panelDraw;
 	
 	public ViewPanelCenter(){
 		setLayout(new GridLayout(1, 2));
@@ -46,7 +48,7 @@ public class ViewPanelCenter extends JPanel {
 		panelRight.setLayout(new BorderLayout(30,30));
 		
 		//-- Panel contenedor del dibujo
-		JPanel jpl_panelDraw = new JPanel();
+		jpl_panelDraw = new JPanel();
 		jpl_panelDraw.setLayout(new GridLayout(1,1));
 		
 		drawHangman = new DrawPatibulo();
@@ -254,6 +256,8 @@ public class ViewPanelCenter extends JPanel {
 	
 	public void setDrawHangman(JPanel draw) {
 		drawHangman = draw;
+		jpl_panelDraw.removeAll();
+		jpl_panelDraw.add(drawHangman);
 	}
 
 	public JPanel getPl1() {
@@ -318,11 +322,5 @@ public class ViewPanelCenter extends JPanel {
 	
 	public JPanel getJpl_letter(){
 		return jpl_letter;
-	}
-
-	public void setDrawHangman(ImageIcon imageIcon) {
-		JPanel draw = new JPanel(new GridLayout(1, 1));
-		draw.add(new JLabel(imageIcon));
-		drawHangman = draw;		
 	}
 }

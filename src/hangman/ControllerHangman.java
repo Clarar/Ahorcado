@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,7 +19,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 	
 	private ModelHangman model;
 	private ViewHangman view;
-	private boolean hangmanTheEnd;
+	private boolean hangmanWinner;
 	private ModelHangmanDictionary modelDictionary;
 	private boolean dictionary;
 	private ImageIcon imageWinner;
@@ -26,96 +28,49 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 	public ControllerHangman( ViewHangman view ){
 		this.model = new ModelHangman();
 		this.view = view;
-		this.hangmanTheEnd = false;
+		this.hangmanWinner = false;
 		this.dictionary = false;
 		this.imageWinner = new ImageIcon("image/enhorabuena.jpg");
 		this.imageLoser = new ImageIcon("image/loser.jpg");
 	}
 	
-	/*public boolean hangmanTheEnd(){
-		return hangmanTheEnd;
-	}*/
-	
-	/*public void ResethangmanTheEnd(){
-		hangmanTheEnd = false;
-	}*/
-	
 	public void youWin(String word){
 		for (int i = 0; i < model.getWord().length(); i++) {
-			if (model.getWord().length() != word.length() || word.toLowerCase().charAt(i) != model.getWord().toLowerCase().charAt(i)) {
-				hangmanTheEnd = true;
+			
+			if (model.getWord().length() != word.length() || 
+				word.toLowerCase().charAt(i) != model.getWord().toLowerCase().charAt(i)) {
+				
 				view.setTextEnd(imageLoser);
+				view.drawHangman(6);
+				
+			}else{
+				if (i == model.getWord().length()-1) {
+					hangmanWinner = true;
+				}
 			}
-			if (hangmanTheEnd) {
-				model.setChar(i, model.getWord().charAt(i));
-			}
+			model.setChar(i, model.getWord().charAt(i));
 		}
 		
-		if (hangmanTheEnd) {
-			//view.setTextEnd(new ImageIcon("image/congratulation.jpg").getImage());
+		if (hangmanWinner) {
 			view.setTextEnd(imageWinner);
 		}
-		//view.panelCenter.setDrawHangman(new ImageIcon("image/congratulation.jpg"));
-		//view.setTextEnd(new ImageIcon("image/congratulation.jpg"));
 		view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-		hangmanTheEnd = true;
 	}
 	
-	/*public void operateOption( int option ){
-		String message ="";
-		switch (option) {
-		case 1:
-			message += processLetter();
-			view.showMessage(message);
-			break;
-		case 2:
-			int random;
-			char letter;
-			message = "";
-			do {
-				random = (int)(Math.random()*model.getWord().length());
-				letter = model.getWord().charAt(random);
-			} while (isRepeatedLetter(letter));
-			message = "La letra revelada es "+letter;
-			if (this.checkLetter(letter)) {
-				if (isWordCompleted()) {
-					hangmanTheEnd = true;
-					message += "\n\nPalabra completada.¡¡Has ganado!!\n\n";
-				}
-				model.incrementmMistake();
-			}
-			view.showMessage(message+"\n\t"+model.getMaskWord()+"\nTe quedan "+model.getAttempts()+" intentos\n");
-			break;
-		case 3:
-			message = "\n\t"+model.getMaskWord()+"\nTe quedan "+model.getAttempts()+" intentos\n";
-			String word = view.insertWord();
-			message += youWin(word);
-			view.showMessage(message);
-			break;
-		}
-	}*/
 	
 	public void processLetter(){
 		char letter;
 		letter = view.panelCenter.getJtxt_letra().getText().charAt(0);
-		//int count = -1;
-		/*do {
-			count++;
-			if (count > 0) {
-				view.setTextError("La letra ya esta introducida.");
-			}
-			letter = view.panelCenter.getJtxt_letra().getText().charAt(0);
-		} while (isRepeatedLetter(letter));*/
-		
+
 		if (isRepeatedLetter(letter)) {
 			view.setTextError("La letra ya esta introducida.");
 		}else{
 			if (checkLetter(letter)) {
 				if (isWordCompleted()) {
-					hangmanTheEnd = true;
-					//view.panelCenter.setDrawHangman(new ImageIcon("image/congratulation.jpg"));
+					hangmanWinner = true;
 					view.setTextEnd(imageWinner);
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+					newGame();
 				}else{
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
 					view.panelCenter.getJlbl_introduced().setText(model.getIntroduced());
@@ -126,6 +81,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				view.panelCenter.getJlbl_attempts().setText(model.getAttempts()+"/6");
 				view.panelCenter.getJlbl_introduced().setText(model.getIntroduced());
 				view.setTextError("Has fallado");
+				drawHangman();
 			}
 		}
 	}
@@ -167,7 +123,6 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 	
 	public boolean notAttempts(){
 		if (model.getAttempts() == 0) {
-			hangmanTheEnd = true;
 			return true;
 		}
 		return false;
@@ -203,14 +158,6 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 		model.setWord(wordRandom);
 	}
 	
-	/*public ControllerHangman2 resetController() throws Exception{
-		ControllerHangman2 controller;
-		String wordRandom = modelDictionary.getWordRandom();
-		
-		controller = new ControllerHangman2(new ModelHangman(wordRandom), new ViewHangman());
-		controller.setModelDictionary(new ModelHangmanDictionary(modelDictionary.getFile()));
-		return controller;
-	}*/
 	
 	private boolean getIntroduced(){
 		if (model.getIntroduced().length() > 0) {
@@ -219,9 +166,6 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			return false;
 		}
 	}
-	/*public void setModelDictionary( ModelHangmanDictionary modelDictionary){
-		this.modelDictionary = modelDictionary;
-	}*/
 	
 	private boolean validateDictionary(String dictionary){
 		if (dictionary != "Elija un idioma...") {
@@ -246,33 +190,29 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 		view.setTextError("Introduce una letra");
 		return false;
 	}
+	
 	public void drawHangman(){
+		view.drawHangman(model.getMistake()); 
+	}
+	
+	public void solveWord(){
 		
-		switch (model.getMistake()) {
-		case 1:
-			view.panelCenter.setDrawHangman(new DrawCabeza());
-			break;
-		case 2:
-			view.panelCenter.setDrawHangman(new DrawTronco());
-			break;
-		case 3:
-			view.panelCenter.setDrawHangman(new DrawBrazoIzquierdo());
-			break;
-		case 4:
-			view.panelCenter.setDrawHangman(new DrawBrazoDerecho());
-			break;
-		case 5:
-			view.panelCenter.setDrawHangman(new DrawPiernaIzquierda());
-			break;
-		case 6:
-			view.panelCenter.setDrawHangman(new DrawPiernaDerecha());
-			break;
+		for (int i = 0; i < model.getWord().length(); i++) {
+			model.setChar(i, model.getWord().charAt(i));
+		}
+		
+	}
+	
+	public void newGame(){
+		if(view.newGame() == 0 ){ 		// si el usuario quiere iniciar la partida.
+			
+		}else{
+			System.exit(0);				//si el usuario no quiere iniciar sesion cierra la ventana.
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//char a = 'A';
 		
 		if (((JButton)e.getSource()).getName() == "start") {
 			String dictionary = (String)view.panelHead.getLanguage().getSelectedItem();
@@ -297,11 +237,15 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			if (notAttempts()) {
 				view.setTextError("Sin intentos");
 				view.setTextEnd(imageLoser);
+				solveWord();
+				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+				newGame();
 			}else{
 				if (isLetter()) {
 					processLetter();
 				}
 			}
+			drawHangman();
 		}
 		
 		if (((JButton)e.getSource()).getName() == "pista") {
@@ -309,6 +253,9 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			if (notAttempts()) {
 				view.setTextError("Sin intentos");
 				view.setTextEnd(imageLoser);
+				solveWord();
+				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+				newGame();
 			}else{
 				int random;
 				char letter;
@@ -318,21 +265,22 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				} while (isRepeatedLetter(letter));
 				if (this.checkLetter(letter)) {
 					if (isWordCompleted()) {
-						hangmanTheEnd = true;
-						//view.panelCenter.setDrawHangman(new ImageIcon("image/congratulation.jpg"));
+						hangmanWinner = true;
 						view.setTextEnd(imageWinner);
+						view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+						newGame();
 					}
 					model.incrementmMistake();
 				}
 				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
 				view.panelCenter.getJlbl_attempts().setText(model.getAttempts()+"/6");
-				
 			}
-			
+			drawHangman();
 		}
 		
 		if (((JButton)e.getSource()).getName() == "resolver") {
 			youWin(view.panelCenter.getJtxt_palabra().getText());
+			newGame();
 			
 		}
 		
@@ -435,6 +383,10 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			if (notAttempts()) {
 				view.setTextError("Sin intentos");
 				view.setTextEnd(imageLoser);
+				drawHangman();
+				solveWord();
+				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+				newGame();
 			}else{
 				if (view.panelCenter.getJtxt_letra().getText().length() > 0) {
 					view.setTextError(" ");
@@ -443,6 +395,8 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				
 				if (view.panelCenter.getJtxt_palabra().getText().length() > 0) {
 					youWin(view.panelCenter.getJtxt_palabra().getText());
+					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+					newGame();
 				}
 			}
 			
@@ -452,8 +406,6 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			view.panelCenter.getJlbl_attempts().setText(model.getAttempts()+"/6");
 		}
 		view.panelCenter.getJlbl_introduced().setText(model.getIntroduced());
-		drawHangman();
-		//view.paintAll(view.getGraphics());
 	}
 
 	@Override
@@ -463,6 +415,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 			view.panelCenter.getJtxt_palabra().setEnabled(true);
 			view.panelCenter.getJbtn_pista().setEnabled(true);
 		}
+		
 		view.setTextError(" ");
 		if (e.VK_ENTER == e.getKeyCode()){
 			if (view.panelCenter.getJtxt_letra().getText().length() > 0) {
@@ -471,20 +424,26 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				if (notAttempts()) {
 					view.setTextError("Sin intentos");
 					view.setTextEnd(imageLoser);
+					drawHangman();
+					solveWord();
+					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+					newGame();
 				}
 			}
 			
 			if (view.panelCenter.getJtxt_palabra().getText().length() > 0) {
 				youWin(view.panelCenter.getJtxt_palabra().getText());
+				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
+				newGame();
 			}
 		}
 		view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-		//if (dictionary) {
+		if (dictionary) {
 			view.panelCenter.getJlbl_attempts().setText(model.getAttempts()+"/6");
-		//}
+		}
 		view.panelCenter.getJlbl_introduced().setText(model.getIntroduced());
+		
 		drawHangman();
-		//view.paintAll(view.getGraphics());
 	}
 
 	@Override

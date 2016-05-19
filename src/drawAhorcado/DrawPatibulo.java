@@ -19,8 +19,8 @@ public class DrawPatibulo extends JPanel {
 	    super.paintComponent(g);
 	    
 	    //pie
-	    g.drawLine(	(int)(((width*0.30))), (int)(((height*0.9))), 
-	    			(int)(((width*0.70))), (int)(((height*0.9))));
+	    g.drawLine(	(int)(((width*0.30))), (int)(((height*0.9))), 		//primer punto
+	    			(int)(((width*0.70))), (int)(((height*0.9))));		//segundo punto
 	    //cuerpo
 	    g.drawLine(	(int)(((width*0.35))), (int)(((height*0.15))), 
 	    			(int)(((width*0.35))), (int)(((height*0.9))));

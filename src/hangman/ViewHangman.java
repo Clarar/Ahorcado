@@ -11,14 +11,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import drawAhorcado.DrawBrazoDerecho;
+import drawAhorcado.DrawBrazoIzquierdo;
 import drawAhorcado.DrawCabeza;
+import drawAhorcado.DrawPiernaDerecha;
+import drawAhorcado.DrawPiernaIzquierda;
+import drawAhorcado.DrawTronco;
 import viewPanel.ViewPanelCenter;
 import viewPanel.ViewPanelFoot;
 import viewPanel.ViewPanelHead;
@@ -58,26 +66,6 @@ public class ViewHangman extends JFrame {
 		});
 		
 		startButtonVisible(true);
-		
-		/*addItemListener(new ItemListener() {
-		    @Override
-		    public void itemStateChanged(ItemEvent e) {
-		        if (e.getStateChange() == ItemEvent.SELECTED) {
-		        	panelFoot.setVisible(panelCenter.jchk_teclado.isSelected());
-		        } else {
-		        	panelFoot.setVisible(panelCenter.jchk_teclado.isSelected());
-		        }
-		    }
-		});*/
-		
-		/*addMouseListener(new MouseAdapter() { 
-			public void mousePressed(java.awt.event.MouseEvent e) {
-				if (e.getSource() == panelCenter.jchk_teclado) {
-					panelFoot.setVisible(panelCenter.jchk_teclado.isSelected());
-				}
-			} 
-			});*/
-		
 	}
 	
 	public void startButtonVisible(boolean visible){
@@ -112,21 +100,17 @@ public class ViewHangman extends JFrame {
 		panelCenter.getJtxt_palabra().setEnabled(false);
 		panelCenter.getJbtn_palabra().setEnabled(false);
 		panelCenter.getJchk_teclado().setEnabled(false);
+		panelCenter.getJbtn_pista().setEnabled(false);
 	}
 	public void setTextEnd(ImageIcon imagen){
 		panelCenter.getJlbl_letra().setText("");
-		//panelCenter.setDrawHangman(new drawImageEnd(imagen));
 		panelCenter.getJlbl_image().setIcon(imagen);
-		//panelCenter.getJpl_letter().add(new drawImageEnd(imagen.getImage()));
-		//panelCenter.getJlbl_letra().setVisible(false);
 		panelCenter.getJpl_letter().setBackground(Color.WHITE);;
 		panelCenter.getJpl_letra().setVisible(false);
-		//panelCenter.getJlbl_letra().setEnabled(false);
-		//panelCenter.getJtxt_letra().setEnabled(false);
-		//panelCenter.getJbtn_letra().setEnabled(false);
 		panelCenter.getJtxt_palabra().setEnabled(false);
 		panelCenter.getJbtn_palabra().setEnabled(false);
 		panelCenter.getJchk_teclado().setEnabled(false);
+		panelCenter.getJbtn_pista().setEnabled(false);
 	}
 	
 	public void run(){
@@ -145,6 +129,73 @@ public class ViewHangman extends JFrame {
 		panelCenter.getJbtn_palabra().addActionListener(controller);
 		panelCenter.getJbtn_letra().addActionListener(controller);
 		panelCenter.getJbtn_pista().addActionListener(controller);
+	}
+	
+public void drawHangman(int mistake){
+		
+		switch (mistake) {
+		case 1:
+			
+			panelCenter.setDrawHangman(new DrawCabeza());
+			panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+			break;
+		case 2:
+			panelCenter.setDrawHangman(new DrawTronco());
+			panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+			break;
+		case 3:
+			panelCenter.setDrawHangman(new DrawBrazoIzquierdo());
+			panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+			break;
+		case 4:
+			panelCenter.setDrawHangman(new DrawBrazoDerecho());
+			panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+			break;
+		case 5:
+			panelCenter.setDrawHangman(new DrawPiernaIzquierda());
+			panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+			break;
+		case 6:
+			DrawPiernaDerecha draw = new DrawPiernaDerecha();
+			panelCenter.setDrawHangman(draw);
+			timerDraw(draw);
+			break;
+		}
+	}
+
+	private void timerDraw(DrawPiernaDerecha hangman){
+		Timer timer= new Timer();
+	
+	    TimerTask task = new TimerTask() {
+	        int count = 1;
+	        int i = 2;
+	
+	        @Override
+	        public void run()
+	        {
+	        		hangman.setPosition(i);
+	        		if (count%2==0) {
+						i--;
+					}else{
+						i++;
+					}
+	        		
+	        		if (i==1 || i==3){
+	        			count++;
+	        		}
+	            
+	        		panelCenter.getDrawHangman().paintAll(panelCenter.getDrawHangman().getGraphics());
+	        }
+	    };
+	        // Empezamos dentro de 10ms y luego lanzamos la tarea cada 500ms
+	    timer.schedule(task, 10, 500);
+	}
+	
+	public int newGame(){
+		int confirmar = JOptionPane.showConfirmDialog(null,
+									"¿Desea Empezar una nueva partida?", "Hangman", JOptionPane.YES_NO_OPTION);
+		
+		return confirmar;
 	}
 	
 	class drawImageEnd extends JPanel{

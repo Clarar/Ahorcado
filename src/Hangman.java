@@ -1,14 +1,14 @@
-import hangman.ViewStart;
-import hangman.ControllerStart;
+import hangman.ControllerHangman;
+import hangman.ViewHangman;
 
 public class Hangman {
 
 	public static void main(String[] args) throws Exception {
-		ViewStart view = new ViewStart(); 
-		ControllerStart controller = new ControllerStart(view);
+		ViewHangman view = new ViewHangman(); 
+		ControllerHangman controller = new ControllerHangman(view);
 		
 		view.setController(controller);
-		view.runGame();
+		view.run();
 	}
 	
 }
