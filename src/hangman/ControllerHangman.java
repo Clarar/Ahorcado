@@ -70,7 +70,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 					hangmanWinner = true;
 					view.setTextEnd(imageWinner);
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-					newGame();
+					//newGame();
 				}else{
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
 					view.panelCenter.getJlbl_introduced().setText(model.getIntroduced());
@@ -239,7 +239,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				view.setTextEnd(imageLoser);
 				solveWord();
 				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-				newGame();
+				//newGame();
 			}else{
 				if (isLetter()) {
 					processLetter();
@@ -255,7 +255,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				view.setTextEnd(imageLoser);
 				solveWord();
 				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-				newGame();
+				//newGame();
 			}else{
 				int random;
 				char letter;
@@ -268,7 +268,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 						hangmanWinner = true;
 						view.setTextEnd(imageWinner);
 						view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-						newGame();
+						//newGame();
 					}
 					model.incrementmMistake();
 				}
@@ -280,7 +280,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 		
 		if (((JButton)e.getSource()).getName() == "resolver") {
 			youWin(view.panelCenter.getJtxt_palabra().getText());
-			newGame();
+			//newGame();
 			
 		}
 		
@@ -386,7 +386,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				drawHangman();
 				solveWord();
 				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-				newGame();
+				//newGame();
 			}else{
 				if (view.panelCenter.getJtxt_letra().getText().length() > 0) {
 					view.setTextError(" ");
@@ -396,7 +396,7 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 				if (view.panelCenter.getJtxt_palabra().getText().length() > 0) {
 					youWin(view.panelCenter.getJtxt_palabra().getText());
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-					newGame();
+					//newGame();
 				}
 			}
 			
@@ -427,14 +427,14 @@ public class ControllerHangman implements ActionListener, KeyListener  {
 					drawHangman();
 					solveWord();
 					view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-					newGame();
+					//newGame();
 				}
 			}
 			
 			if (view.panelCenter.getJtxt_palabra().getText().length() > 0) {
 				youWin(view.panelCenter.getJtxt_palabra().getText());
 				view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
-				newGame();
+				//newGame();
 			}
 		}
 		view.panelCenter.getJlbl_maskWord().setText(model.getMaskWord());
